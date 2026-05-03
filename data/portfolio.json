@@ -51,9 +51,9 @@
       "name": "月供基金組合",
       "type": "基金",
       "start_date": "2025-05-04",
-      "monthly_investment": 5668,
-      "monthly_hkd": 5000,
-      "monthly_usd": 1168,
+      "monthly_investment": 8668,
+      "monthly_hkd": 7000,
+      "monthly_usd": 1668,
       "target_amount": 500000,
       "contribution_years": 5,
       "expected_return": 0.12,
@@ -62,19 +62,81 @@
       "usd_to_hkd_rate": 7.8,
       "investments": [
         {
-          "symbol": "普徠仕美國大型增長",
-          "name": "普徠仕(盧森堡)美國大型增長股票基金",
-          "allocation": 0.0706,
-          "monthly": 400,
-          "currency": "USD",
-          "current_value": 5229.80,
-          "current_value_hkd": 40792.44,
-          "total_invested": 0
+          "symbol": "貝萊德世界黃金",
+          "name": "貝萊德世界黃金基金",
+          "allocation": 0.1285,
+          "monthly": 1000,
+          "currency": "HKD",
+          "current_value": 20973.87,
+          "current_value_hkd": 20973.87,
+          "total_invested": 21000.00,
+          "total_return": -26.13,
+          "return_rate": -0.12
+        },
+        {
+          "symbol": "富蘭克林科技",
+          "name": "富蘭克林科技基金",
+          "allocation": 0.1763,
+          "monthly": 3000,
+          "currency": "HKD",
+          "current_value": 28761.43,
+          "current_value_hkd": 28761.43,
+          "total_invested": 4541.86,
+          "total_return": 24219.57,
+          "return_rate": 533.25
+        },
+        {
+          "symbol": "安聯環球人工智能",
+          "name": "安聯環球人工智能股票基金",
+          "allocation": 0.1787,
+          "monthly": 1000,
+          "currency": "HKD",
+          "current_value": 29159.60,
+          "current_value_hkd": 29159.60,
+          "total_invested": 18758.29,
+          "total_return": 10401.31,
+          "return_rate": 55.45
+        },
+        {
+          "symbol": "貝萊德世界科技",
+          "name": "貝萊德世界科技基金",
+          "allocation": 0.1831,
+          "monthly": 1000,
+          "currency": "HKD",
+          "current_value": 29870.52,
+          "current_value_hkd": 29870.52,
+          "total_invested": 0,
+          "total_return": 33796.75,
+          "return_rate": 0
+        },
+        {
+          "symbol": "貝萊德世界金融",
+          "name": "貝萊德世界金融基金",
+          "allocation": 0.1931,
+          "monthly": 1000,
+          "currency": "HKD",
+          "current_value": 31504.94,
+          "current_value_hkd": 31504.94,
+          "total_invested": 31000.00,
+          "total_return": 504.94,
+          "return_rate": 1.63
+        },
+        {
+          "symbol": "摩根美國科技",
+          "name": "摩根基金-美國科技基金",
+          "allocation": 0.1402,
+          "monthly": 1000,
+          "currency": "HKD",
+          "current_value": 22907.08,
+          "current_value_hkd": 22907.08,
+          "total_invested": 13573.35,
+          "total_return": 9333.73,
+          "return_rate": 68.77
         },
         {
           "symbol": "富達環球科技",
           "name": "富達基金-環球科技基金",
-          "allocation": 0.0229,
+          "allocation": 0.0518,
           "monthly": 130,
           "currency": "USD",
           "current_value": 3720.92,
@@ -86,7 +148,7 @@
         {
           "symbol": "普徠仕美國大型增長",
           "name": "普徠仕(盧森堡)美國大型增長股票基金",
-          "allocation": 0.0706,
+          "allocation": 0.0483,
           "monthly": 400,
           "currency": "USD",
           "current_value": 3465.95,
@@ -98,59 +160,41 @@
         {
           "symbol": "瀚亞日本動力",
           "name": "瀚亞投資-日本動力股票基金",
-          "allocation": 0.1126,
+          "allocation": 0.0888,
           "monthly": 638,
           "currency": "USD",
           "current_value": 0.00,
           "current_value_hkd": 0.00,
-          "total_invested": 0
-        },
-        {
-          "symbol": "富達環球科技",
-          "name": "富達基金-環球科技基金",
-          "allocation": 0.0229,
-          "monthly": 130,
-          "currency": "USD",
-          "current_value": 4829.80,
-          "current_value_hkd": 37672.44,
-          "total_invested": 0
-        },
-        {
-          "symbol": "貝萊德世界科技",
-          "name": "貝萊德世界科技基金",
-          "allocation": 0.0882,
-          "monthly": 1000,
-          "currency": "HKD",
-          "current_value": 37000.00,
-          "current_value_hkd": 37000.00,
-          "total_invested": 0
+          "total_invested": 0,
+          "total_return": 0,
+          "return_rate": 0
         }
       ],
       "summary": {
-        "total_current_value_hkd": 56057.59,
-        "total_invested_hkd": 51860.00,
-        "total_return_hkd": 4197.59,
-        "return_rate": 8.09,
-        "progress_percent": 11.21
+        "total_current_value_hkd": 219235.03,
+        "total_invested_hkd": 95173.68,
+        "total_return_hkd": 79016.86,
+        "return_rate": 83.02,
+        "progress_percent": 43.85
       },
       "transactions": [],
       "milestones": [
-        {"date": "2025-05-04", "title": "計劃啟動", "description": "首次供款 $5,668", "target_value": 5668},
-        {"date": "2026-05-04", "title": "第1年檢視", "description": "累計投入 $68,016", "target_value": 75000},
-        {"date": "2027-05-04", "title": "第2年檢視", "description": "累計投入 $136,032", "target_value": 160000},
-        {"date": "2028-05-04", "title": "第3年檢視", "description": "累計投入 $204,048", "target_value": 250000},
-        {"date": "2029-05-04", "title": "第4年檢視", "description": "累計投入 $272,064", "target_value": 350000},
-        {"date": "2030-05-04", "title": "供款結束", "description": "累計投入 $340,080", "target_value": 450000},
-        {"date": "2031-05-04", "title": "目標達成", "description": "預期 $500,000", "target_value": 500000}
+        {"date": "2025-05-04", "title": "計劃啟動", "description": "首次供款 $8,668", "target_value": 8668},
+        {"date": "2026-05-04", "title": "第1年檢視", "description": "累計投入 $104,016", "target_value": 120000},
+        {"date": "2027-05-04", "title": "第2年檢視", "description": "累計投入 $208,032", "target_value": 250000},
+        {"date": "2028-05-04", "title": "第3年檢視", "description": "累計投入 $312,048", "target_value": 380000},
+        {"date": "2029-05-04", "title": "第4年檢視", "description": "累計投入 $416,064", "target_value": 450000},
+        {"date": "2030-05-04", "title": "供款結束", "description": "累計投入 $520,080", "target_value": 550000},
+        {"date": "2031-05-04", "title": "目標達成", "description": "預期 $650,000", "target_value": 650000}
       ]
     }
   ],
   "market_data": {
-    "last_updated": "2025-01-15T11:06:00",
+    "last_updated": "2025-01-15T14:09:00",
     "prices": {},
     "exchange_rate": {
       "usd_to_hkd": 7.8,
-      "last_updated": "2025-01-15T11:06:00"
+      "last_updated": "2025-01-15T14:09:00"
     }
   }
 }
