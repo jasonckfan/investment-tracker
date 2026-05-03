@@ -1,38 +1,12 @@
 {
-  "last_updated": "2026-05-03T20:39:57.667939",
-  "config": {
+  "plan": {
+    "name": "三劍客精簡版",
     "start_date": "2025-05-04",
     "monthly_investment": 1960,
     "target_amount": 350000,
     "contribution_years": 5,
     "expected_return": 0.15,
-    "etfs": [
-      {
-        "symbol": "QQQ",
-        "name": "納斯達克100 ETF",
-        "allocation": 0.35,
-        "monthly": 686
-      },
-      {
-        "symbol": "SMH",
-        "name": "半導體 ETF",
-        "allocation": 0.35,
-        "monthly": 686
-      },
-      {
-        "symbol": "VGT",
-        "name": "科技行業 ETF",
-        "allocation": 0.3,
-        "monthly": 588
-      }
-    ]
-  },
-  "portfolio": {
-    "months_elapsed": 12,
-    "total_invested": 23520,
-    "current_value": 25521.39,
-    "total_return": 2001.39,
-    "return_rate": 8.51
+    "broker": "富途牛牛"
   },
   "etfs": [
     {
@@ -40,40 +14,39 @@
       "name": "納斯達克100 ETF",
       "allocation": 0.35,
       "monthly": 686,
-      "current_price": 674.15,
-      "ytd_return": 37.91,
-      "week_52_high": 674.15,
-      "week_52_low": 481.41,
-      "last_updated": "2026-05-03T20:39:57.464714"
+      "currency": "USD"
     },
     {
-      "symbol": "SMH",
+      "symbol": "SMH", 
       "name": "半導體 ETF",
       "allocation": 0.35,
       "monthly": 686,
-      "current_price": 509.82,
-      "ytd_return": 132.76,
-      "week_52_high": 509.82,
-      "week_52_low": 215.59,
-      "last_updated": "2026-05-03T20:39:57.568903"
+      "currency": "USD"
     },
     {
       "symbol": "VGT",
-      "name": "科技行業 ETF",
-      "allocation": 0.3,
+      "name": "科技行業 ETF", 
+      "allocation": 0.30,
       "monthly": 588,
-      "current_price": 104.85,
-      "ytd_return": 47.8,
-      "week_52_high": 104.85,
-      "week_52_low": 69.87,
-      "last_updated": "2026-05-03T20:39:57.666403"
+      "currency": "USD"
     }
   ],
-  "alerts": [
-    {
-      "type": "rebalance",
-      "message": "再平衡檢視日：5月4日（還有1天）",
-      "severity": "warning"
-    }
+  "transactions": [],
+  "market_data": {
+    "last_updated": null,
+    "prices": {}
+  },
+  "milestones": [
+    {"date": "2025-05-04", "title": "計劃啟動", "description": "首次供款 $1,960", "target_value": 1960},
+    {"date": "2026-05-04", "title": "第1年檢視", "description": "累計投入 $23,520", "target_value": 25000},
+    {"date": "2027-05-04", "title": "第2年檢視", "description": "累計投入 $47,040", "target_value": 56000},
+    {"date": "2028-05-04", "title": "第3年檢視", "description": "累計投入 $70,560", "target_value": 89000},
+    {"date": "2029-05-04", "title": "第4年檢視", "description": "累計投入 $94,080", "target_value": 126000},
+    {"date": "2030-05-04", "title": "供款結束", "description": "累計投入 $117,600", "target_value": 174000},
+    {"date": "2031-05-04", "title": "第6年檢視", "description": "複利增長中", "target_value": 200000},
+    {"date": "2032-05-04", "title": "第7年檢視", "description": "目標 $230,000", "target_value": 230000},
+    {"date": "2033-05-04", "title": "第8年檢視", "description": "複利增長中", "target_value": 264000},
+    {"date": "2034-05-04", "title": "第9年檢視", "description": "接近目標", "target_value": 304000},
+    {"date": "2035-05-04", "title": "目標達成", "description": "預期 $350,000", "target_value": 350000}
   ]
 }
