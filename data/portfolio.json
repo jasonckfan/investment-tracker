@@ -52,11 +52,14 @@
       "type": "基金",
       "start_date": "2025-05-04",
       "monthly_investment": 5668,
+      "monthly_hkd": 5000,
+      "monthly_usd": 1168,
       "target_amount": 500000,
       "contribution_years": 5,
       "expected_return": 0.12,
       "broker": "富途牛牛",
       "currency": "混合",
+      "usd_to_hkd_rate": 7.8,
       "investments": [
         {
           "symbol": "普徠仕美國大型增長",
@@ -64,7 +67,9 @@
           "allocation": 0.0706,
           "monthly": 400,
           "currency": "USD",
-          "current_value": 5229.80
+          "current_value": 5229.80,
+          "current_value_hkd": 40792.44,
+          "total_invested": 0
         },
         {
           "symbol": "富蘭克林科技",
@@ -72,7 +77,9 @@
           "allocation": 0.5293,
           "monthly": 3000,
           "currency": "HKD",
-          "current_value": 59000.00
+          "current_value": 59000.00,
+          "current_value_hkd": 59000.00,
+          "total_invested": 0
         },
         {
           "symbol": "安聯環球人工智能",
@@ -80,7 +87,9 @@
           "allocation": 0.1764,
           "monthly": 1000,
           "currency": "HKD",
-          "current_value": 76500.00
+          "current_value": 76500.00,
+          "current_value_hkd": 76500.00,
+          "total_invested": 0
         },
         {
           "symbol": "瀚亞日本動力",
@@ -88,7 +97,9 @@
           "allocation": 0.1126,
           "monthly": 638,
           "currency": "USD",
-          "current_value": 0.00
+          "current_value": 0.00,
+          "current_value_hkd": 0.00,
+          "total_invested": 0
         },
         {
           "symbol": "富達環球科技",
@@ -96,7 +107,9 @@
           "allocation": 0.0229,
           "monthly": 130,
           "currency": "USD",
-          "current_value": 4829.80
+          "current_value": 4829.80,
+          "current_value_hkd": 37672.44,
+          "total_invested": 0
         },
         {
           "symbol": "貝萊德世界科技",
@@ -104,9 +117,18 @@
           "allocation": 0.0882,
           "monthly": 1000,
           "currency": "HKD",
-          "current_value": 37000.00
+          "current_value": 37000.00,
+          "current_value_hkd": 37000.00,
+          "total_invested": 0
         }
       ],
+      "summary": {
+        "total_current_value_hkd": 250964.88,
+        "total_invested_hkd": 0,
+        "total_return_hkd": 0,
+        "return_rate": 0,
+        "progress_percent": 50.19
+      },
       "transactions": [],
       "milestones": [
         {"date": "2025-05-04", "title": "計劃啟動", "description": "首次供款 $5,668", "target_value": 5668},
@@ -120,7 +142,11 @@
     }
   ],
   "market_data": {
-    "last_updated": null,
-    "prices": {}
+    "last_updated": "2025-01-15T11:06:00",
+    "prices": {},
+    "exchange_rate": {
+      "usd_to_hkd": 7.8,
+      "last_updated": "2025-01-15T11:06:00"
+    }
   }
 }
