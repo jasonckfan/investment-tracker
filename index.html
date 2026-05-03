@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0f172a">
+    <title>投資計劃追蹤 | Investment Tracker</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="static/icons/icon-192x192.png">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-orange: #f59e0b;
+            --accent-purple: #8b5cf6;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%);
+            padding: 20px;
+            border-bottom: 1px solid var(--bg-card);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .header .subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--bg-card);
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title .icon {
+            width: 24px;
+            height: 24px;
+            background: var(--accent-blue);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .stat-value.positive {
+            color: var(--accent-green);
+        }
+
+        .stat-value.negative {
+            color: var(--accent-red);
+        }
+
+        .stat-value.warning {
+            color: var(--accent-orange);
+        }
+
+        .progress-section {
+            margin-top: 15px;
+        }
+
+        .progress-bar {
+            background: var(--bg-card);
+            height: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            border-radius: 6px;
+            transition: width 0.5s ease;
+        }
+
+        .etf-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+
+        .etf-card {
+            background: var(--bg-card);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid var(--accent-blue);
+        }
+
+        .etf-card.warning {
+            border-left-color: var(--accent-orange);
+        }
+
+        .etf-card.danger {
+            border-left-color: var(--accent-red);
+        }
+
+        .etf-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .etf-symbol {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .etf-name {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .etf-allocation {
+            background: var(--bg-secondary);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        .etf-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .metric {
+            background: var(--bg-secondary);
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .metric-label {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            margin-bottom: 4px;
+        }
+
+        .metric-value {
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .alert-section {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(239, 68, 68, 0.1) 100%);
+            border: 1px solid var(--accent-orange);
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .alert-title {
+            color: var(--accent-orange);
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .alert-list {
+            list-style: none;
+        }
+
+        .alert-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--bg-card);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-list li:last-child {
+            border-bottom: none;
+        }
+
+        .alert-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .alert-icon.warning {
+            background: var(--accent-orange);
+        }
+
+        .alert-icon.danger {
+            background: var(--accent-red);
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--bg-card);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 25px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -24px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--bg-card);
+            border: 2px solid var(--text-secondary);
+        }
+
+        .timeline-item.completed::before {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+        }
+
+        .timeline-item.upcoming::before {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+        }
+
+        .timeline-date {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+        }
+
+        .timeline-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .timeline-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-top: 20px;
+        }
+
+        .update-btn {
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+            transition: background 0.3s;
+        }
+
+        .update-btn:hover {
+            background: #2563eb;
+        }
+
+        .last-updated {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
+
+        .install-prompt {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .install-prompt.show {
+            display: flex;
+        }
+
+        .install-btn {
+            background: white;
+            color: var(--accent-purple);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .etf-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 1.2rem;
+            }
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--bg-card);
+            border-radius: 50%;
+            border-top-color: var(--accent-blue);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📈 投資計劃追蹤</h1>
+        <div class="subtitle">三劍客精簡版 | 目標：10年 $350,000</div>
+    </div>
+
+    <div class="install-prompt" id="installPrompt">
+        <span>📱 安裝此應用，隨時追蹤投資表現</span>
+        <button class="install-btn" onclick="installPWA()">安裝</button>
+    </div>
+
+    <div class="container">
+        <!-- 總覽統計 -->
+        <div class="card">
+            <div class="card-title">
+                <div class="icon">📊</div>
+                投資總覽
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">當前資產</div>
+                    <div class="stat-value" id="currentValue">$0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">累計投入</div>
+                    <div class="stat-value" id="totalInvested">$0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">累計回報</div>
+                    <div class="stat-value" id="totalReturn">$0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">回報率</div>
+                    <div class="stat-value" id="returnRate">0%</div>
+                </div>
+            </div>
+            <div class="progress-section">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                    <span>目標進度</span>
+                    <span id="progressText">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressBar" style="width: 0%"></div>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-top: 10px; color: var(--text-secondary); font-size: 0.85rem;">
+                    <span>目標：$350,000</span>
+                    <span id="remainingAmount">剩餘：$350,000</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ETF詳情 -->
+        <div class="card">
+            <div class="card-title">
+                <div class="icon">💼</div>
+                ETF 表現追蹤
+            </div>
+            <div class="etf-grid" id="etfGrid">
+                <!-- ETF卡片將由JavaScript生成 -->
+            </div>
+            <div class="alert-section" id="alertSection" style="display: none;">
+                <div class="alert-title">
+                    <span>⚠️</span>
+                    再平衡提醒
+                </div>
+                <ul class="alert-list" id="alertList">
+                    <!-- 警報將由JavaScript生成 -->
+                </ul>
+            </div>
+        </div>
+
+        <!-- 圖表 -->
+        <div class="card">
+            <div class="card-title">
+                <div class="icon">📈</div>
+                資產增長趨勢
+            </div>
+            <div class="chart-container">
+                <canvas id="growthChart"></canvas>
+            </div>
+        </div>
+
+        <!-- 時間線 -->
+        <div class="card">
+            <div class="card-title">
+                <div class="icon">📅</div>
+                重要里程碑
+            </div>
+            <div class="timeline" id="timeline">
+                <!-- 時間線將由JavaScript生成 -->
+            </div>
+        </div>
+
+        <!-- 更新按 -->
+        <button class="update-btn" onclick="updateData()">
+            <span id="updateText">🔄 更新數據</span>
+        </button>
+        <div class="last-updated" id="lastUpdated">
+            最後更新：從未更新
+        </div>
+    </div>
+
+    <script>
+        // 投資計劃配置
+        const PLAN_CONFIG = {
+            startDate: '2025-05-04',
+            monthlyInvestment: 1960,
+            targetAmount: 350000,
+            contributionYears: 5,
+            totalYears: 10,
+            expectedReturn: 0.15,
+            etfs: [
+                { symbol: 'QQQ', name: '納斯達克100 ETF', allocation: 0.35, monthly: 686, expectedReturn: 0.15 },
+                { symbol: 'SMH', name: '半導體 ETF', allocation: 0.35, monthly: 686, expectedReturn: 0.16 },
+                { symbol: 'VGT', name: '科技行業 ETF', allocation: 0.30, monthly: 588, expectedReturn: 0.14 }
+            ]
+        };
+
+        // 里程碑數據
+        const MILESTONES = [
+            { date: '2025-05-04', title: '計劃啟動', desc: '首次供款 $1,960', completed: true },
+            { date: '2026-05-04', title: '第1年檢視', desc: '目標資產 $25,000' },
+            { date: '2027-05-04', title: '第2年檢視', desc: '目標資產 $56,000' },
+            { date: '2028-05-04', title: '第3年檢視', desc: '目標資產 $89,000' },
+            { date: '2029-05-04', title: '第4年檢視', desc: '目標資產 $126,000' },
+            { date: '2030-05-04', title: '供款結束', desc: '目標資產 $174,000' },
+            { date: '2031-05-04', title: '第6年檢視', desc: '複利增長中' },
+            { date: '2032-05-04', title: '第7年檢視', desc: '目標資產 $230,000' },
+            { date: '2033-05-04', title: '第8年檢視', desc: '複利增長中' },
+            { date: '2034-05-04', title: '第9年檢視', desc: '接近目標' },
+            { date: '2035-05-04', title: '目標達成', desc: '預期資產 $350,000' }
+        ];
+
+        let growthChart = null;
+        let deferredPrompt = null;
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            renderETFCards();
+            renderTimeline();
+            initChart();
+            checkRebalance();
+            
+            // PWA安裝提示
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                document.getElementById('installPrompt').classList.add('show');
+            });
+        });
+
+        // 計算投資數據
+        function calculateInvestmentData() {
+            const startDate = new Date(PLAN_CONFIG.startDate);
+            const today = new Date();
+            const monthsElapsed = Math.max(0, 
+                (today.getFullYear() - startDate.getFullYear()) * 12 + 
+                (today.getMonth() - startDate.getMonth())
+            );
+            
+            const totalInvested = Math.min(monthsElapsed, PLAN_CONFIG.contributionYears * 12) * PLAN_CONFIG.monthlyInvestment;
+            
+            // 計算預期資產值（簡化計算）
+            let currentValue = 0;
+            for (let i = 0; i < monthsElapsed && i < PLAN_CONFIG.contributionYears * 12; i++) {
+                const monthsRemaining = monthsElapsed - i;
+                currentValue += PLAN_CONFIG.monthlyInvestment * Math.pow(1 + PLAN_CONFIG.expectedReturn / 12, monthsRemaining);
+            }
+            
+            // 如果超過供款期，計算複利
+            if (monthsElapsed > PLAN_CONFIG.contributionYears * 12) {
+                const growthMonths = monthsElapsed - PLAN_CONFIG.contributionYears * 12;
+                currentValue = currentValue * Math.pow(1 + PLAN_CONFIG.expectedReturn, growthMonths / 12);
+            }
+            
+            return {
+                monthsElapsed,
+                totalInvested,
+                currentValue: Math.round(currentValue),
+                totalReturn: Math.round(currentValue - totalInvested),
+                returnRate: totalInvested > 0 ? ((currentValue - totalInvested) / totalInvested * 100).toFixed(1) : 0
+            };
+        }
+
+        // 加載數據
+        function loadData() {
+            const data = calculateInvestmentData();
+            
+            document.getElementById('currentValue').textContent = `$${data.currentValue.toLocaleString()}`;
+            document.getElementById('currentValue').className = 'stat-value positive';
+            
+            document.getElementById('totalInvested').textContent = `$${data.totalInvested.toLocaleString()}`;
+            document.getElementById('totalReturn').textContent = `$${data.totalReturn.toLocaleString()}`;
+            document.getElementById('totalReturn').className = 'stat-value positive';
+            
+            document.getElementById('returnRate').textContent = `${data.returnRate}%`;
+            document.getElementById('returnRate').className = data.returnRate >= 0 ? 'stat-value positive' : 'stat-value negative';
+            
+            const progress = Math.min((data.currentValue / PLAN_CONFIG.targetAmount * 100), 100);
+            document.getElementById('progressText').textContent = `${progress.toFixed(1)}%`;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+            document.getElementById('remainingAmount').textContent = `剩餘：$${Math.max(0, PLAN_CONFIG.targetAmount - data.currentValue).toLocaleString()}`;
+        }
+
+        // 渲染ETF卡片
+        function renderETFCards() {
+            const grid = document.getElementById('etfGrid');
+            grid.innerHTML = '';
+            
+            PLAN_CONFIG.etfs.forEach(etf => {
+                const card = document.createElement('div');
+                card.className = 'etf-card';
+                card.innerHTML = `
+                    <div class="etf-header">
+                        <div>
+                            <div class="etf-symbol">${etf.symbol}</div>
+                            <div class="etf-name">${etf.name}</div>
+                        </div>
+                        <div class="etf-allocation">${(etf.allocation * 100).toFixed(0)}%</div>
+                    </div>
+                    <div class="etf-metrics">
+                        <div class="metric">
+                            <div class="metric-label">每月投入</div>
+                            <div class="metric-value">$${etf.monthly}</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">預期回報</div>
+                            <div class="metric-value">${(etf.expectedReturn * 100).toFixed(0)}%</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">當前價格</div>
+                            <div class="metric-value" id="price-${etf.symbol}">--</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">YTD表現</div>
+                            <div class="metric-value" id="ytd-${etf.symbol}">--</div>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // 檢查再平衡
+        function checkRebalance() {
+            const alertSection = document.getElementById('alertSection');
+            const alertList = document.getElementById('alertList');
+            
+            // 這裡可以添加實際的偏差檢查邏輯
+            // 目前顯示下次再平衡時間
+            const nextRebalance = getNextRebalanceDate();
+            
+            alertSection.style.display = 'block';
+            alertList.innerHTML = `
+                <li>
+                    <span class="alert-icon warning">!</span>
+                    <span>下次再平衡檢視：${nextRebalance}</span>
+                </li>
+                <li>
+                    <span class="alert-icon warning">!</span>
+                    <span>觸發條件：任一ETF偏離目標配置超過±15%</span>
+                </li>
+            `;
+        }
+
+        // 獲取下次再平衡日期
+        function getNextRebalanceDate() {
+            const today = new Date();
+            const currentMonth = today.getMonth();
+            const currentYear = today.getFullYear();
+            
+            // 再平衡月份：5月和11月
+            let rebalanceMonths = [4, 10]; // 0-indexed
+            
+            for (let month of rebalanceMonths) {
+                if (month > currentMonth || (month === currentMonth && today.getDate() < 4)) {
+                    return `${currentYear}年${month + 1}月4日`;
+                }
+            }
+            
+            return `${currentYear + 1}年5月4日`;
+        }
+
+        // 渲染時間線
+        function renderTimeline() {
+            const timeline = document.getElementById('timeline');
+            timeline.innerHTML = '';
+            
+            const today = new Date();
+            
+            MILESTONES.forEach((milestone, index) => {
+                const milestoneDate = new Date(milestone.date);
+                const isCompleted = milestoneDate <= today;
+                const isUpcoming = !isCompleted && index > 0 && new Date(MILESTONES[index - 1].date) <= today;
+                
+                const item = document.createElement('div');
+                item.className = `timeline-item ${isCompleted ? 'completed' : ''} ${isUpcoming ? 'upcoming' : ''}`;
+                item.innerHTML = `
+                    <div class="timeline-date">${milestone.date}</div>
+                    <div class="timeline-title">${milestone.title}</div>
+                    <div class="timeline-desc">${milestone.desc}</div>
+                `;
+                timeline.appendChild(item);
+            });
+        }
+
+        // 初始化圖表
+        function initChart() {
+            const ctx = document.getElementById('growthChart').getContext('2d');
+            
+            // 生成預測數據
+            const labels = [];
+            const investedData = [];
+            const projectedData = [];
+            
+            for (let year = 0; year <= 10; year++) {
+                labels.push(`第${year}年`);
+                
+                const months = year * 12;
+                const invested = Math.min(months, 60) * 1960;
+                investedData.push(invested);
+                
+                // 簡化計算預期資產
+                let projected = 0;
+                for (let i = 0; i < months && i < 60; i++) {
+                    projected += 1960 * Math.pow(1.0125, months - i);
+                }
+                if (months > 60) {
+                    projected = projected * Math.pow(1.15, (months - 60) / 12);
+                }
+                projectedData.push(projected);
+            }
+            
+            growthChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '累計投入',
+                        data: investedData,
+                        borderColor: '#94a3b8',
+                        backgroundColor: 'rgba(148, 163, 184, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: '預期資產',
+                        data: projectedData,
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#f8fafc' }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            ticks: {
+                                color: '#94a3b8',
+                                callback: function(value) {
+                                    return '$' + (value / 1000).toFixed(0) + 'K';
+                                }
+                            },
+                            grid: { color: '#334155' }
+                        },
+                        x: {
+                            ticks: { color: '#94a3b8' },
+                            grid: { color: '#334155' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 更新數據
+        async function updateData() {
+            const btn = document.querySelector('.update-btn');
+            const originalText = document.getElementById('updateText').textContent;
+            
+            btn.disabled = true;
+            document.getElementById('updateText').innerHTML = '<span class="loading"></span> 更新中...';
+            
+            try {
+                // 這裡可以添加實際的API調用
+                // 模擬API調用延遲
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                // 更新ETF價格（模擬數據）
+                updateETFPrices();
+                
+                // 更新時間戳
+                const now = new Date();
+                document.getElementById('lastUpdated').textContent = 
+                    `最後更新：${now.toLocaleString('zh-HK')}`;
+                
+                // 重新加載數據
+                loadData();
+                
+            } catch (error) {
+                console.error('更新失敗:', error);
+                alert('更新失敗，請稍後再試');
+            } finally {
+                btn.disabled = false;
+                document.getElementById('updateText').textContent = originalText;
+            }
+        }
+
+        // 更新ETF價格（模擬）
+        function updateETFPrices() {
+            const mockPrices = {
+                'QQQ': { price: '$452.35', ytd: '+12.5%' },
+                'SMH': { price: '$248.67', ytd: '+18.3%' },
+                'VGT': { price: '$523.89', ytd: '+11.2%' }
+            };
+            
+            Object.keys(mockPrices).forEach(symbol => {
+                const priceEl = document.getElementById(`price-${symbol}`);
+                const ytdEl = document.getElementById(`ytd-${symbol}`);
+                if (priceEl) priceEl.textContent = mockPrices[symbol].price;
+                if (ytdEl) {
+                    ytdEl.textContent = mockPrices[symbol].ytd;
+                    ytdEl.style.color = mockPrices[symbol].ytd.startsWith('+') ? '#10b981' : '#ef4444';
+                }
+            });
+        }
+
+        // PWA安裝
+        function installPWA() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('用戶安裝了PWA');
+                    }
+                    deferredPrompt = null;
+                    document.getElementById('installPrompt').classList.remove('show');
+                });
+            }
+        }
+
+        // 註冊Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(reg => console.log('Service Worker 註冊成功'))
+                .catch(err => console.log('Service Worker 註冊失敗', err));
+        }
+    </script>
+</body>
+</html>
