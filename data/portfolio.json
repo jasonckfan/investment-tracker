@@ -1,0 +1,79 @@
+{
+  "last_updated": "2026-05-03T20:39:57.667939",
+  "config": {
+    "start_date": "2025-05-04",
+    "monthly_investment": 1960,
+    "target_amount": 350000,
+    "contribution_years": 5,
+    "expected_return": 0.15,
+    "etfs": [
+      {
+        "symbol": "QQQ",
+        "name": "納斯達克100 ETF",
+        "allocation": 0.35,
+        "monthly": 686
+      },
+      {
+        "symbol": "SMH",
+        "name": "半導體 ETF",
+        "allocation": 0.35,
+        "monthly": 686
+      },
+      {
+        "symbol": "VGT",
+        "name": "科技行業 ETF",
+        "allocation": 0.3,
+        "monthly": 588
+      }
+    ]
+  },
+  "portfolio": {
+    "months_elapsed": 12,
+    "total_invested": 23520,
+    "current_value": 25521.39,
+    "total_return": 2001.39,
+    "return_rate": 8.51
+  },
+  "etfs": [
+    {
+      "symbol": "QQQ",
+      "name": "納斯達克100 ETF",
+      "allocation": 0.35,
+      "monthly": 686,
+      "current_price": 674.15,
+      "ytd_return": 37.91,
+      "week_52_high": 674.15,
+      "week_52_low": 481.41,
+      "last_updated": "2026-05-03T20:39:57.464714"
+    },
+    {
+      "symbol": "SMH",
+      "name": "半導體 ETF",
+      "allocation": 0.35,
+      "monthly": 686,
+      "current_price": 509.82,
+      "ytd_return": 132.76,
+      "week_52_high": 509.82,
+      "week_52_low": 215.59,
+      "last_updated": "2026-05-03T20:39:57.568903"
+    },
+    {
+      "symbol": "VGT",
+      "name": "科技行業 ETF",
+      "allocation": 0.3,
+      "monthly": 588,
+      "current_price": 104.85,
+      "ytd_return": 47.8,
+      "week_52_high": 104.85,
+      "week_52_low": 69.87,
+      "last_updated": "2026-05-03T20:39:57.666403"
+    }
+  ],
+  "alerts": [
+    {
+      "type": "rebalance",
+      "message": "再平衡檢視日：5月4日（還有1天）",
+      "severity": "warning"
+    }
+  ]
+}

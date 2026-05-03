@@ -68,12 +68,20 @@ def fetch_yahoo_finance(symbol):
             current_price = prices['close'][latest_idx]
             ytd_return = ((current_price - first_price) / first_price * 100) if first_price else 0
             
+            # 計算52周高低
+            valid_prices = [p for p in prices['close'] if p is not None]
+            week_52_high = max(valid_prices) if valid_prices else current_price
+            week_52_low = min(valid_prices) if valid_prices else current_price
+            
             return {
                 'symbol': symbol,
-                'price': current_price,
-                'ytd_return': ytd_return,
+                'price': round(current_price, 2),
+                'ytd_return': round(ytd_return, 2),
+                'week_52_high': round(week_52_high, 2),
+                'week_52_low': round(week_52_low, 2),
                 'timestamp': timestamps[latest_idx],
-                'currency': meta.get('currency', 'USD')
+                'currency': meta.get('currency', 'USD'),
+                'last_updated': datetime.now().isoformat()
             }
             
     except Exception as e:
@@ -113,9 +121,6 @@ def check_rebalance_needed(etf_data):
     """檢查是否需要再平衡"""
     alerts = []
     
-    # 這裡可以添加實際的偏差檢查邏輯
-    # 目前只檢查下次再平衡時間
-    
     today = datetime.now()
     current_month = today.month
     current_date = today.day
@@ -131,6 +136,17 @@ def check_rebalance_needed(etf_data):
                     'type': 'rebalance',
                     'message': f'再平衡檢視日：{month}月4日（還有{days_until}天）',
                     'severity': 'warning'
+                })
+    
+    # 檢查ETF偏離
+    for etf in etf_data:
+        if 'current_allocation' in etf and 'target_allocation' in etf:
+            deviation = abs(etf['current_allocation'] - etf['target_allocation'])
+            if deviation > 0.15:  # 超過15%
+                alerts.append({
+                    'type': 'allocation',
+                    'message': f"{etf['symbol']} 配置偏離 {deviation*100:.1f}%",
+                    'severity': 'danger'
                 })
     
     return alerts
@@ -151,12 +167,16 @@ def update_data():
                 **etf,
                 'current_price': data['price'],
                 'ytd_return': data['ytd_return'],
-                'last_updated': datetime.now().isoformat()
+                'week_52_high': data['week_52_high'],
+                'week_52_low': data['week_52_low'],
+                'last_updated': data['last_updated']
             })
             print(f"  價格: ${data['price']:.2f}")
             print(f"  YTD: {data['ytd_return']:+.2f}%")
+            print(f"  52周高低: ${data['week_52_low']:.2f} - ${data['week_52_high']:.2f}")
         else:
-            print(f"  無法獲取數據")
+            print(f"  無法獲取數據，使用緩存數據")
+            etf_data.append(etf)
     
     # 計算投資組合價值
     portfolio = calculate_portfolio_value()
@@ -194,7 +214,8 @@ def update_data():
     if alerts:
         print(f"\n提醒:")
         for alert in alerts:
-            print(f"  ⚠️ {alert['message']}")
+            icon = "⚠️" if alert['severity'] == 'warning' else "🚨"
+            print(f"  {icon} {alert['message']}")
     
     print(f"\n數據已保存至: data/portfolio.json")
 

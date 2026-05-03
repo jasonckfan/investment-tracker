@@ -147,15 +147,23 @@
 
         .etf-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: 1fr;
             gap: 15px;
+        }
+        
+        @media (min-width: 768px) {
+            .etf-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         .etf-card {
             background: var(--bg-card);
-            padding: 20px;
+            padding: 15px;
             border-radius: 12px;
             border-left: 4px solid var(--accent-blue);
+            width: 100%;
+            overflow: hidden;
         }
 
         .etf-card.warning {
@@ -194,23 +202,32 @@
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 10px;
+            width: 100%;
         }
-
+        
         .metric {
             background: var(--bg-secondary);
-            padding: 12px;
+            padding: 10px;
             border-radius: 8px;
+            min-width: 0;
+            overflow: hidden;
         }
-
+        
         .metric-label {
             color: var(--text-secondary);
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
-
+        
         .metric-value {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: bold;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .alert-section {
@@ -591,9 +608,58 @@
         }
 
         // 加載數據
-        function loadData() {
-            const data = calculateInvestmentData();
+        async function loadData() {
+            try {
+                // 嘗試從JSON文件加載真實數據
+                const response = await fetch('data/portfolio.json');
+                if (response.ok) {
+                    const jsonData = await response.json();
+                    updateUIWithRealData(jsonData);
+                } else {
+                    // 使用計算數據
+                    const data = calculateInvestmentData();
+                    updateUIWithCalculatedData(data);
+                }
+            } catch (error) {
+                console.log('使用計算數據:', error);
+                const data = calculateInvestmentData();
+                updateUIWithCalculatedData(data);
+            }
+        }
+        
+        function updateUIWithRealData(data) {
+            const portfolio = data.portfolio;
+            const etfs = data.etfs;
             
+            document.getElementById('currentValue').textContent = `$${portfolio.current_value.toLocaleString()}`;
+            document.getElementById('currentValue').className = portfolio.total_return >= 0 ? 'stat-value positive' : 'stat-value negative';
+            
+            document.getElementById('totalInvested').textContent = `$${portfolio.total_invested.toLocaleString()}`;
+            document.getElementById('totalReturn').textContent = `$${portfolio.total_return.toLocaleString()}`;
+            document.getElementById('totalReturn').className = portfolio.total_return >= 0 ? 'stat-value positive' : 'stat-value negative';
+            
+            document.getElementById('returnRate').textContent = `${portfolio.return_rate}%`;
+            document.getElementById('returnRate').className = portfolio.return_rate >= 0 ? 'stat-value positive' : 'stat-value negative';
+            
+            const progress = Math.min((portfolio.current_value / data.config.target_amount * 100), 100);
+            document.getElementById('progressText').textContent = `${progress.toFixed(1)}%`;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+            document.getElementById('remainingAmount').textContent = `剩餘：$${Math.max(0, data.config.target_amount - portfolio.current_value).toLocaleString()}`;
+            
+            // 更新ETF數據
+            updateETFData(etfs);
+            
+            // 更新警報
+            if (data.alerts && data.alerts.length > 0) {
+                updateAlerts(data.alerts);
+            }
+            
+            // 更新時間戳
+            const lastUpdated = new Date(data.last_updated);
+            document.getElementById('lastUpdated').textContent = `最後更新：${lastUpdated.toLocaleString('zh-HK')}`;
+        }
+        
+        function updateUIWithCalculatedData(data) {
             document.getElementById('currentValue').textContent = `$${data.currentValue.toLocaleString()}`;
             document.getElementById('currentValue').className = 'stat-value positive';
             
@@ -608,6 +674,35 @@
             document.getElementById('progressText').textContent = `${progress.toFixed(1)}%`;
             document.getElementById('progressBar').style.width = `${progress}%`;
             document.getElementById('remainingAmount').textContent = `剩餘：$${Math.max(0, PLAN_CONFIG.targetAmount - data.currentValue).toLocaleString()}`;
+        }
+        
+        function updateETFData(etfs) {
+            etfs.forEach(etf => {
+                const priceEl = document.getElementById(`price-${etf.symbol}`);
+                const ytdEl = document.getElementById(`ytd-${etf.symbol}`);
+                if (priceEl && etf.current_price) {
+                    priceEl.textContent = `$${etf.current_price.toFixed(2)}`;
+                }
+                if (ytdEl && etf.ytd_return !== undefined) {
+                    ytdEl.textContent = `${etf.ytd_return >= 0 ? '+' : ''}${etf.ytd_return.toFixed(2)}%`;
+                    ytdEl.style.color = etf.ytd_return >= 0 ? '#10b981' : '#ef4444';
+                }
+            });
+        }
+        
+        function updateAlerts(alerts) {
+            const alertSection = document.getElementById('alertSection');
+            const alertList = document.getElementById('alertList');
+            
+            if (alerts.length > 0) {
+                alertSection.style.display = 'block';
+                alertList.innerHTML = alerts.map(alert => `
+                    <li>
+                        <span class="alert-icon ${alert.severity}">${alert.severity === 'warning' ? '!' : '⚠'}</span>
+                        <span>${alert.message}</span>
+                    </li>
+                `).join('');
+            }
         }
 
         // 渲染ETF卡片
