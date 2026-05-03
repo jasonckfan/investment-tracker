@@ -453,7 +453,22 @@
         <button class="install-btn" onclick="installPWA()">安裝</button>
     </div>
 
+    
     <div class="container">
+        <!-- 快速入口 -->
+        <div class="card" style="background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); border: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                <div>
+                    <div style="font-size: 1.2rem; font-weight: bold; margin-bottom: 5px;">📝 快速操作</div>
+                    <div style="font-size: 0.9rem; opacity: 0.9;">添加交易記錄或更新市場報價</div>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <a href="add-transaction.html" style="background: white; color: #3b82f6; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: bold;">添加交易</a>
+                    <button onclick="updateData()" style="background: rgba(255,255,255,0.2); color: white; padding: 10px 20px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; font-weight: bold;">更新報價</button>
+                </div>
+            </div>
+        </div>
+
         <!-- 總覽統計 -->
         <div class="card">
             <div class="card-title">

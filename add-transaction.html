@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>添加交易記錄 | Investment Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f172a;
+            color: #f8fafc;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            background: #1e293b;
+            color: #f8fafc;
+            font-size: 1rem;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        
+        .preset-btn {
+            display: inline-block;
+            padding: 8px 16px;
+            margin: 5px 5px 0 0;
+            background: #334155;
+            border: none;
+            border-radius: 6px;
+            color: #f8fafc;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+        
+        .preset-btn:hover {
+            background: #3b82f6;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: #3b82f6;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        
+        .submit-btn:hover {
+            background: #2563eb;
+        }
+        
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #1e293b;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            display: none;
+        }
+        
+        .result.show {
+            display: block;
+        }
+        
+        .result-title {
+            color: #10b981;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .result-code {
+            background: #0f172a;
+            padding: 10px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: #94a3b8;
+            word-break: break-all;
+        }
+        
+        .copy-btn {
+            margin-top: 10px;
+            padding: 8px 16px;
+            background: #10b981;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+        
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #3b82f6;
+            text-decoration: none;
+        }
+        
+        .help-text {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            margin-top: 5px;
+        }
+        
+        .transaction-list {
+            margin-top: 30px;
+            padding: 20px;
+            background: #1e293b;
+            border-radius: 8px;
+        }
+        
+        .transaction-list h2 {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .transaction-item {
+            padding: 10px;
+            background: #334155;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .batch-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #1e293b;
+            border-radius: 8px;
+        }
+        
+        .batch-section h2 {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            background: #0f172a;
+            color: #f8fafc;
+            font-size: 0.9rem;
+            min-height: 150px;
+            font-family: monospace;
+        }
+        
+        .example {
+            color: #94a3b8;
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📝 添加交易記錄</h1>
+        
+        <!-- 單筆交易表單 -->
+        <form id="transactionForm">
+            <div class="form-group">
+                <label>日期</label>
+                <input type="date" id="date" required>
+                <div>
+                    <button type="button" class="preset-btn" onclick="setToday()">今天</button>
+                    <button type="button" class="preset-btn" onclick="setDate('2025-05-04')">5月4日</button>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>ETF</label>
+                <select id="etf" required>
+                    <option value="QQQ">QQQ - 納斯達克100 ETF</option>
+                    <option value="SMH">SMH - 半導體 ETF</option>
+                    <option value="VGT">VGT - 科技行業 ETF</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>買入金額 (USD)</label>
+                <input type="number" id="amount" step="0.01" required>
+                <div>
+                    <button type="button" class="preset-btn" onclick="setAmount(686)">$686 (QQQ/SMH)</button>
+                    <button type="button" class="preset-btn" onclick="setAmount(588)">$588 (VGT)</button>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>成交價格 (USD/股)</label>
+                <input type="number" id="price" step="0.01" required>
+                <div class="help-text">從富途牛牛交易確認單查看</div>
+            </div>
+            
+            <div class="form-group">
+                <label>成交股數</label>
+                <input type="number" id="shares" step="0.0001" required>
+                <div class="help-text">系統會自動計算：股數 = 金額 / 價格</div>
+            </div>
+            
+            <button type="submit" class="submit-btn">生成交易指令</button>
+        </form>
+        
+        <div class="result" id="result">
+            <div class="result-title">✅ 交易指令已生成</div>
+            <div class="result-code" id="resultCode"></div>
+            <button type="button" class="copy-btn" onclick="copyCode()">複製指令</button>
+        </div>
+        
+        <!-- 批量添加 -->
+        <div class="batch-section">
+            <h2>📋 批量添加（進階）</h2>
+            <p style="color: #94a3b8; margin-bottom: 10px;">貼上多筆交易記錄，格式：日期,ETF,股數,價格,金額</p>
+            <textarea id="batchInput" placeholder="2025-05-04,QQQ,1.02,672.55,686.00
+2025-05-04,SMH,1.35,508.15,686.00
+2025-05-04,VGT,5.60,105.00,588.00"></textarea>
+            <div class="example">示例：2025-05-04,QQQ,1.02,672.55,686.00</div>
+            <button type="button" class="submit-btn" onclick="generateBatch()" style="margin-top: 10px;">生成批量指令</button>
+            <div class="result" id="batchResult" style="margin-top: 15px;">
+                <div class="result-code" id="batchResultCode"></div>
+                <button type="button" class="copy-btn" onclick="copyBatchCode()">複製指令</button>
+            </div>
+        </div>
+        
+        <a href="index.html" class="back-link">← 返回主頁</a>
+    </div>
+    
+    <script>
+        // 設置默認日期為今天
+        document.getElementById('date').valueAsDate = new Date();
+        
+        // 自動計算股數
+        document.getElementById('amount').addEventListener('input', calculateShares);
+        document.getElementById('price').addEventListener('input', calculateShares);
+        
+        function calculateShares() {
+            const amount = parseFloat(document.getElementById('amount').value) || 0;
+            const price = parseFloat(document.getElementById('price').value) || 0;
+            if (price > 0) {
+                document.getElementById('shares').value = (amount / price).toFixed(4);
+            }
+        }
+        
+        function setToday() {
+            document.getElementById('date').valueAsDate = new Date();
+        }
+        
+        function setDate(date) {
+            document.getElementById('date').value = date;
+        }
+        
+        function setAmount(amount) {
+            document.getElementById('amount').value = amount;
+            calculateShares();
+        }
+        
+        document.getElementById('transactionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const date = document.getElementById('date').value;
+            const etf = document.getElementById('etf').value;
+            const shares = document.getElementById('shares').value;
+            const price = document.getElementById('price').value;
+            const amount = document.getElementById('amount').value;
+            
+            const code = `python3 update_data.py add ${date} ${etf} ${shares} ${price} ${amount}`;
+            
+            document.getElementById('resultCode').textContent = code;
+            document.getElementById('result').classList.add('show');
+        });
+        
+        function copyCode() {
+            const code = document.getElementById('resultCode').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                alert('指令已複製到剪貼簿');
+            });
+        }
+        
+        function generateBatch() {
+            const input = document.getElementById('batchInput').value.trim();
+            if (!input) return;
+            
+            const lines = input.split('\n').filter(line => line.trim());
+            const commands = lines.map(line => {
+                const parts = line.split(',').map(p => p.trim());
+                if (parts.length >= 5) {
+                    return `python3 update_data.py add ${parts[0]} ${parts[1]} ${parts[2]} ${parts[3]} ${parts[4]}`;
+                }
+                return null;
+            }).filter(cmd => cmd !== null);
+            
+            const batchCode = commands.join(' && \
+') + ' && \
+python3 update_data.py returns';
+            
+            document.getElementById('batchResultCode').textContent = batchCode;
+            document.getElementById('batchResult').classList.add('show');
+        }
+        
+        function copyBatchCode() {
+            const code = document.getElementById('batchResultCode').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                alert('批量指令已複製到剪貼簿');
+            });
+        }
+    </script>
+</body>
+</html>
