@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#0f172a">
-    <title>投資計劃追蹤 | Investment Tracker</title>
+    <title>基金投資組合 | Investment Tracker</title>
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="static/icons/icon-192x192.png">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -53,6 +53,41 @@
         .header .subtitle {
             color: var(--text-secondary);
             font-size: 0.9rem;
+        }
+
+        /* Tab Navigation */
+        .tab-nav {
+            display: flex;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--bg-card);
+            padding: 0 20px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 15px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            color: var(--accent-blue);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 20%;
+            right: 20%;
+            height: 3px;
+            background: var(--accent-blue);
+            border-radius: 3px 3px 0 0;
         }
 
         .container {
@@ -140,60 +175,56 @@
             transition: width 0.5s ease;
         }
 
-        .etf-grid {
+        .fund-grid {
             display: grid;
             grid-template-columns: 1fr;
             gap: 15px;
         }
 
         @media (min-width: 768px) {
-            .etf-grid {
+            .fund-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
 
-        .etf-card {
+        .fund-card {
             background: var(--bg-card);
             padding: 15px;
             border-radius: 12px;
-            border-left: 4px solid var(--accent-blue);
+            border-left: 4px solid var(--accent-green);
             width: 100%;
             overflow: hidden;
         }
 
-        .etf-card.warning {
+        .fund-card.warning {
             border-left-color: var(--accent-orange);
         }
 
-        .etf-card.danger {
-            border-left-color: var(--accent-red);
-        }
-
-        .etf-header {
+        .fund-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
         }
 
-        .etf-symbol {
-            font-size: 1.3rem;
+        .fund-name {
+            font-size: 1.1rem;
             font-weight: bold;
         }
 
-        .etf-name {
+        .fund-type {
             color: var(--text-secondary);
             font-size: 0.85rem;
         }
 
-        .etf-allocation {
+        .fund-allocation {
             background: var(--bg-secondary);
             padding: 5px 12px;
             border-radius: 20px;
             font-size: 0.85rem;
         }
 
-        .etf-metrics {
+        .fund-metrics {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 10px;
@@ -270,10 +301,6 @@
 
         .alert-icon.warning {
             background: var(--accent-orange);
-        }
-
-        .alert-icon.danger {
-            background: var(--accent-red);
         }
 
         .timeline {
@@ -364,30 +391,6 @@
             margin-top: 10px;
         }
 
-        .install-prompt {
-            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
-            padding: 15px 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            display: none;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .install-prompt.show {
-            display: flex;
-        }
-
-        .install-btn {
-            background: white;
-            color: var(--accent-purple);
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
         .no-data {
             text-align: center;
             padding: 40px;
@@ -421,12 +424,6 @@
             font-weight: bold;
         }
 
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.2rem;
-            }
-        }
-
         .loading {
             display: inline-block;
             width: 20px;
@@ -440,70 +437,66 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+
+        .add-btn {
+            background: var(--accent-green);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .add-btn:hover {
+            background: #059669;
+        }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>📈 投資計劃追蹤</h1>
-        <div class="subtitle">三劍客精簡版 | 目標：10年 $350,000</div>
+        <h1>🎯 基金投資組合</h1>
+        <div class="subtitle">富途牛牛基金定投 | 目標：5年 $350,000</div>
     </div>
 
-    <div class="install-prompt" id="installPrompt">
-        <span>📱 安裝此應用，隨時追蹤投資表現</span>
-        <button class="install-btn" onclick="installPWA()">安裝</button>
+    <!-- Tab Navigation -->
+    <div class="tab-nav">
+        <button class="tab-btn" onclick="window.location.href='index.html'">ETF組合</button>
+        <button class="tab-btn active">基金組合</button>
     </div>
 
-    
     <div class="container">
-        <!-- 快速入口 -->
-        <div class="card" style="background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); border: none;">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-                <div>
-                    <div style="font-size: 1.2rem; font-weight: bold; margin-bottom: 5px;">📝 快速操作</div>
-                    <div style="font-size: 0.9rem; opacity: 0.9;">添加交易記錄或更新市場報價</div>
-                </div>
-                <div style="display: flex; gap: 10px;">
-                    <a href="add-transaction.html" style="background: white; color: #3b82f6; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: bold;">添加交易</a>
-                    <button onclick="updateData()" style="background: rgba(255,255,255,0.2); color: white; padding: 10px 20px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; font-weight: bold;">更新報價</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Tab Navigation -->
-        <div class="card" style="padding: 0; overflow: hidden;">
-            <div style="display: flex; border-bottom: 1px solid var(--bg-card);">
-                <div style="flex: 1; padding: 15px; text-align: center; background: var(--accent-blue); color: white; font-weight: bold;">
-                    ETF組合
-                </div>
-                <a href="funds.html" style="flex: 1; padding: 15px; text-align: center; background: var(--bg-card); color: var(--text-secondary); text-decoration: none; display: flex; align-items: center; justify-content: center;">
-                    基金組合
-                </a>
-            </div>
-        </div>
-
         <!-- 總覽統計 -->
         <div class="card">
             <div class="card-title">
-                <div class="icon">📊</div>
-                投資總覽
+                <div class="icon" style="background: var(--accent-green);">📊</div>
+                基金投資總覽
             </div>
             <div id="summaryContent">
                 <div class="no-data">
                     <div class="no-data-icon">📋</div>
-                    <div>尚未有投資記錄</div>
-                    <div style="font-size: 0.9rem; margin-top: 10px;">首次買入日期：2025年5月4日</div>
+                    <div>尚未有基金投資記錄</div>
+                    <div style="font-size: 0.9rem; margin-top: 10px; color: var(--text-secondary);">
+                        計劃開始日期：2025年5月4日<br>
+                        每月投入：$5,000 HKD
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- ETF詳情 -->
+        <!-- 基金詳情 -->
         <div class="card">
             <div class="card-title">
-                <div class="icon">💼</div>
-                ETF 表現追蹤
+                <div class="icon" style="background: var(--accent-green);">💼</div>
+                基金持倉追蹤
             </div>
-            <div class="etf-grid" id="etfGrid">
-                <!-- ETF卡片將由JavaScript生成 -->
+            <div class="fund-grid" id="fundGrid">
+                <!-- 基金卡片將由JavaScript生成 -->
             </div>
             <div class="alert-section" id="alertSection" style="display: none;">
                 <div class="alert-title">
@@ -519,21 +512,22 @@
         <!-- 交易記錄 -->
         <div class="card">
             <div class="card-title">
-                <div class="icon">📝</div>
-                交易記錄
+                <div class="icon" style="background: var(--accent-green);">📝</div>
+                基金交易記錄
             </div>
             <div id="transactionContent">
                 <div class="no-data">
                     <div class="no-data-icon">💰</div>
-                    <div>尚未有交易記錄</div>
+                    <div>尚未有基金交易記錄</div>
                 </div>
             </div>
+            <a href="add-fund-transaction.html" class="add-btn">+ 添加基金交易</a>
         </div>
 
         <!-- 圖表 -->
         <div class="card">
             <div class="card-title">
-                <div class="icon">📈</div>
+                <div class="icon" style="background: var(--accent-green);">📈</div>
                 資產增長趨勢
             </div>
             <div class="chart-container">
@@ -542,9 +536,9 @@
         </div>
 
         <!-- 時間線 -->
-        <div class="card" onclick="window.location.href='milestones.html'" style="cursor: pointer;">
+        <div class="card" onclick="window.location.href='fund-milestones.html'" style="cursor: pointer;">
             <div class="card-title">
-                <div class="icon">📅</div>
+                <div class="icon" style="background: var(--accent-green);">📅</div>
                 <span>重要里程碑</span>
                 <span style="font-size: 0.8rem; color: var(--text-secondary); margin-left: auto;">點擊查看詳情 →</span>
             </div>
@@ -553,9 +547,9 @@
             </div>
         </div>
 
-        <!-- 更新按 -->
+        <!-- 更新按鈕 -->
         <button class="update-btn" onclick="updateData()">
-            <span id="updateText">🔄 更新報價</span>
+            <span id="updateText">🔄 更新數據</span>
         </button>
         <div class="last-updated" id="lastUpdated">
             最後更新：從未更新
@@ -564,21 +558,14 @@
 
     <script>
         let portfolioData = null;
+        let fundPortfolio = null;
         let growthChart = null;
-        let deferredPrompt = null;
 
         // 初始化
         document.addEventListener('DOMContentLoaded', function() {
             loadData();
             renderTimeline();
             initChart();
-            
-            // PWA安裝提示
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                deferredPrompt = e;
-                document.getElementById('installPrompt').classList.add('show');
-            });
         });
 
         // 加載數據
@@ -587,7 +574,11 @@
                 const response = await fetch('data/portfolio.json');
                 if (response.ok) {
                     portfolioData = await response.json();
-                    updateUI();
+                    // 找到基金組合
+                    fundPortfolio = portfolioData.portfolios.find(p => p.id === 'funds');
+                    if (fundPortfolio) {
+                        updateUI();
+                    }
                 }
             } catch (error) {
                 console.error('加載數據失敗:', error);
@@ -596,9 +587,9 @@
 
         // 更新UI
         function updateUI() {
-            if (!portfolioData) return;
+            if (!fundPortfolio) return;
             
-            const hasTransactions = portfolioData.transactions && portfolioData.transactions.length > 0;
+            const hasTransactions = fundPortfolio.transactions && fundPortfolio.transactions.length > 0;
             
             if (hasTransactions) {
                 updateSummaryWithRealData();
@@ -607,7 +598,7 @@
                 showNoDataSummary();
             }
             
-            updateETFCards();
+            updateFundCards();
             updateAlerts();
             updateLastUpdated();
         }
@@ -618,10 +609,10 @@
             summaryContent.innerHTML = `
                 <div class="no-data">
                     <div class="no-data-icon">📋</div>
-                    <div>尚未有投資記錄</div>
+                    <div>尚未有基金投資記錄</div>
                     <div style="font-size: 0.9rem; margin-top: 10px; color: var(--text-secondary);">
-                        計劃開始日期：2025年5月4日<br>
-                        每月投入：$1,960
+                        計劃開始日期：${fundPortfolio.start_date}<br>
+                        每月投入：$${fundPortfolio.monthly_investment.toLocaleString()} ${fundPortfolio.currency}
                     </div>
                 </div>
             `;
@@ -666,7 +657,7 @@
                         <div class="progress-fill" style="width: ${Math.min(summary.progress, 100)}%"></div>
                     </div>
                     <div style="display: flex; justify-content: space-between; margin-top: 10px; color: var(--text-secondary); font-size: 0.85rem;">
-                        <span>目標：$350,000</span>
+                        <span>目標：$${fundPortfolio.target_amount.toLocaleString()}</span>
                         <span>剩餘：$${summary.remaining.toLocaleString()}</span>
                     </div>
                 </div>
@@ -675,41 +666,19 @@
 
         // 計算真實摘要
         function calculateRealSummary() {
-            const transactions = portfolioData.transactions || [];
-            const prices = portfolioData.market_data?.prices || {};
+            const transactions = fundPortfolio.transactions || [];
             
-            // 按ETF分組計算
-            const etfHoldings = {};
-            portfolioData.etfs.forEach(etf => {
-                etfHoldings[etf.symbol] = {
-                    shares: 0,
-                    totalCost: 0
-                };
-            });
-            
-            transactions.forEach(trans => {
-                if (etfHoldings[trans.etf_symbol]) {
-                    etfHoldings[trans.etf_symbol].shares += trans.shares;
-                    etfHoldings[trans.etf_symbol].totalCost += trans.amount;
-                }
-            });
-            
-            // 計算總值
             let totalInvested = 0;
-            let currentValue = 0;
-            
-            Object.keys(etfHoldings).forEach(symbol => {
-                const holding = etfHoldings[symbol];
-                totalInvested += holding.totalCost;
-                
-                const currentPrice = prices[symbol]?.price || 0;
-                currentValue += holding.shares * currentPrice;
+            transactions.forEach(trans => {
+                totalInvested += trans.amount;
             });
             
+            // 簡化計算：假設當前價值（實際應從基金淨值計算）
+            const currentValue = totalInvested; // 暫時假設
             const totalReturn = currentValue - totalInvested;
             const returnRate = totalInvested > 0 ? ((totalReturn / totalInvested) * 100).toFixed(2) : 0;
-            const progress = ((currentValue / portfolioData.plan.target_amount) * 100).toFixed(1);
-            const remaining = Math.max(0, portfolioData.plan.target_amount - currentValue);
+            const progress = ((currentValue / fundPortfolio.target_amount) * 100).toFixed(1);
+            const remaining = Math.max(0, fundPortfolio.target_amount - currentValue);
             
             return {
                 currentValue: Math.round(currentValue),
@@ -723,14 +692,14 @@
 
         // 更新交易記錄
         function updateTransactionList() {
-            const transactions = portfolioData.transactions || [];
+            const transactions = fundPortfolio.transactions || [];
             const transactionContent = document.getElementById('transactionContent');
             
             if (transactions.length === 0) {
                 transactionContent.innerHTML = `
                     <div class="no-data">
                         <div class="no-data-icon">💰</div>
-                        <div>尚未有交易記錄</div>
+                        <div>尚未有基金交易記錄</div>
                     </div>
                 `;
                 return;
@@ -746,13 +715,13 @@
                     ${sortedTransactions.map(trans => `
                         <div class="transaction-item">
                             <div>
-                                <div style="font-weight: bold;">${trans.etf_symbol}</div>
+                                <div style="font-weight: bold;">${trans.fund_symbol}</div>
                                 <div class="transaction-date">${trans.date}</div>
                             </div>
                             <div style="text-align: right;">
                                 <div class="transaction-amount">$${trans.amount.toLocaleString()}</div>
                                 <div style="font-size: 0.85rem; color: var(--text-secondary);">
-                                    ${trans.shares.toFixed(4)}股 @ $${trans.price_per_share.toFixed(2)}
+                                    ${trans.units.toFixed(4)}單位 @ $${trans.nav.toFixed(2)}
                                 </div>
                             </div>
                         </div>
@@ -761,59 +730,49 @@
             `;
         }
 
-        // 更新ETF卡片
-        function updateETFCards() {
-            const grid = document.getElementById('etfGrid');
-            const prices = portfolioData?.market_data?.prices || {};
-            const transactions = portfolioData?.transactions || [];
+        // 更新基金卡片
+        function updateFundCards() {
+            const grid = document.getElementById('fundGrid');
+            const transactions = fundPortfolio?.transactions || [];
             
-            // 計算每個ETF的持有量
+            // 計算每個基金的持有量
             const holdings = {};
             transactions.forEach(trans => {
-                if (!holdings[trans.etf_symbol]) {
-                    holdings[trans.etf_symbol] = { shares: 0, cost: 0 };
+                if (!holdings[trans.fund_symbol]) {
+                    holdings[trans.fund_symbol] = { units: 0, cost: 0 };
                 }
-                holdings[trans.etf_symbol].shares += trans.shares;
-                holdings[trans.etf_symbol].cost += trans.amount;
+                holdings[trans.fund_symbol].units += trans.units;
+                holdings[trans.fund_symbol].cost += trans.amount;
             });
             
-            grid.innerHTML = portfolioData.etfs.map(etf => {
-                const priceData = prices[etf.symbol] || {};
-                const holding = holdings[etf.symbol] || { shares: 0, cost: 0 };
-                const currentPrice = priceData.price || 0;
-                const currentValue = holding.shares * currentPrice;
-                const profit = currentValue - holding.cost;
-                const returnRate = holding.cost > 0 ? ((profit / holding.cost) * 100).toFixed(2) : 0;
+            grid.innerHTML = fundPortfolio.investments.map(fund => {
+                const holding = holdings[fund.symbol] || { units: 0, cost: 0 };
                 
                 return `
-                    <div class="etf-card">
-                        <div class="etf-header">
+                    <div class="fund-card">
+                        <div class="fund-header">
                             <div>
-                                <div class="etf-symbol">${etf.symbol}</div>
-                                <div class="etf-name">${etf.name}</div>
+                                <div class="fund-name">${fund.name}</div>
+                                <div class="fund-type">${fund.symbol}</div>
                             </div>
-                            <div class="etf-allocation">${(etf.allocation * 100).toFixed(0)}%</div>
+                            <div class="fund-allocation">${(fund.allocation * 100).toFixed(0)}%</div>
                         </div>
-                        <div class="etf-metrics">
+                        <div class="fund-metrics">
                             <div class="metric">
-                                <div class="metric-label">當前價格</div>
-                                <div class="metric-value">$${currentPrice ? currentPrice.toFixed(2) : '--'}</div>
+                                <div class="metric-label">每月投入</div>
+                                <div class="metric-value">$${fund.monthly.toLocaleString()}</div>
                             </div>
                             <div class="metric">
-                                <div class="metric-label">YTD回報</div>
-                                <div class="metric-value" style="color: ${priceData.ytd_return >= 0 ? '#10b981' : '#ef4444'}">
-                                    ${priceData.ytd_return ? (priceData.ytd_return >= 0 ? '+' : '') + priceData.ytd_return.toFixed(2) + '%' : '--'}
-                                </div>
+                                <div class="metric-label">持有單位</div>
+                                <div class="metric-value">${holding.units > 0 ? holding.units.toFixed(4) : '--'}</div>
                             </div>
                             <div class="metric">
-                                <div class="metric-label">持有股數</div>
-                                <div class="metric-value">${holding.shares > 0 ? holding.shares.toFixed(4) : '--'}</div>
+                                <div class="metric-label">總成本</div>
+                                <div class="metric-value">${holding.cost > 0 ? '$' + Math.round(holding.cost).toLocaleString() : '--'}</div>
                             </div>
                             <div class="metric">
-                                <div class="metric-label">盈虧</div>
-                                <div class="metric-value" style="color: ${profit >= 0 ? '#10b981' : '#ef4444'}">
-                                    ${holding.shares > 0 ? (profit >= 0 ? '+' : '') + '$' + Math.round(profit).toLocaleString() + ' (' + returnRate + '%)' : '--'}
-                                </div>
+                                <div class="metric-label">配置比例</div>
+                                <div class="metric-value">${(fund.allocation * 100).toFixed(0)}%</div>
                             </div>
                         </div>
                     </div>
@@ -842,7 +801,7 @@
             }
             
             // 檢查是否有交易記錄
-            const hasTransactions = portfolioData?.transactions?.length > 0;
+            const hasTransactions = fundPortfolio?.transactions?.length > 0;
             if (!hasTransactions) {
                 alerts.push({
                     type: 'info',
@@ -867,14 +826,14 @@
         // 渲染時間線
         function renderTimeline() {
             const timeline = document.getElementById('timeline');
-            if (!portfolioData) return;
+            if (!fundPortfolio) return;
             
             const today = new Date();
             
-            timeline.innerHTML = portfolioData.milestones.map((milestone, index) => {
+            timeline.innerHTML = fundPortfolio.milestones.map((milestone, index) => {
                 const milestoneDate = new Date(milestone.date);
                 const isCompleted = milestoneDate <= today;
-                const isUpcoming = !isCompleted && index > 0 && new Date(portfolioData.milestones[index - 1].date) <= today;
+                const isUpcoming = !isCompleted && index > 0 && new Date(fundPortfolio.milestones[index - 1].date) <= today;
                 
                 return `
                     <div class="timeline-item ${isCompleted ? 'completed' : ''} ${isUpcoming ? 'upcoming' : ''}">
@@ -890,25 +849,30 @@
         function initChart() {
             const ctx = document.getElementById('growthChart').getContext('2d');
             
+            if (!fundPortfolio) return;
+            
             // 生成預測數據
             const labels = [];
             const investedData = [];
             const projectedData = [];
             
-            for (let year = 0; year <= 10; year++) {
+            const years = fundPortfolio.contribution_years + 5; // 供款年數 + 複利年數
+            
+            for (let year = 0; year <= years; year++) {
                 labels.push(`第${year}年`);
                 
                 const months = year * 12;
-                const invested = Math.min(months, 60) * 1960;
+                const invested = Math.min(months, fundPortfolio.contribution_years * 12) * fundPortfolio.monthly_investment;
                 investedData.push(invested);
                 
                 // 簡化計算預期資產
                 let projected = 0;
-                for (let i = 0; i < months && i < 60; i++) {
-                    projected += 1960 * Math.pow(1.0125, months - i);
+                for (let i = 0; i < months && i < fundPortfolio.contribution_years * 12; i++) {
+                    projected += fundPortfolio.monthly_investment * Math.pow(1 + fundPortfolio.expected_return / 12, months - i);
                 }
-                if (months > 60) {
-                    projected = projected * Math.pow(1.15, (months - 60) / 12);
+                if (months > fundPortfolio.contribution_years * 12) {
+                    const growthMonths = months - fundPortfolio.contribution_years * 12;
+                    projected = projected * Math.pow(1 + fundPortfolio.expected_return, growthMonths / 12);
                 }
                 projectedData.push(projected);
             }
@@ -926,8 +890,8 @@
                     }, {
                         label: '預期資產',
                         data: projectedData,
-                        borderColor: '#3b82f6',
-                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
                         tension: 0.4
                     }]
                 },
@@ -967,7 +931,6 @@
             document.getElementById('updateText').innerHTML = '<span class="loading"></span> 更新中...';
             
             try {
-                // 這裡可以添加實際的API調用
                 // 模擬更新
                 await new Promise(resolve => setTimeout(resolve, 1500));
                 
@@ -990,27 +953,6 @@
                 document.getElementById('lastUpdated').textContent = 
                     `最後更新：${lastUpdated.toLocaleString('zh-HK')}`;
             }
-        }
-
-        // PWA安裝
-        function installPWA() {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('用戶安裝了PWA');
-                    }
-                    deferredPrompt = null;
-                    document.getElementById('installPrompt').classList.remove('show');
-                });
-            }
-        }
-
-        // 註冊Service Worker
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js')
-                .then(reg => console.log('Service Worker 註冊成功'))
-                .catch(err => console.log('Service Worker 註冊失敗', err));
         }
     </script>
 </body>

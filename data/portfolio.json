@@ -1,52 +1,95 @@
 {
-  "plan": {
-    "name": "三劍客精簡版",
-    "start_date": "2025-05-04",
-    "monthly_investment": 1960,
-    "target_amount": 350000,
-    "contribution_years": 5,
-    "expected_return": 0.15,
-    "broker": "富途牛牛"
-  },
-  "etfs": [
+  "portfolios": [
     {
-      "symbol": "QQQ",
-      "name": "納斯達克100 ETF",
-      "allocation": 0.35,
-      "monthly": 686,
-      "currency": "USD"
+      "id": "etfs",
+      "name": "三劍客ETF組合",
+      "type": "ETF",
+      "start_date": "2025-05-04",
+      "monthly_investment": 1960,
+      "target_amount": 350000,
+      "contribution_years": 5,
+      "expected_return": 0.15,
+      "broker": "富途牛牛",
+      "currency": "USD",
+      "investments": [
+        {
+          "symbol": "QQQ",
+          "name": "納斯達克100 ETF",
+          "allocation": 0.35,
+          "monthly": 686
+        },
+        {
+          "symbol": "SMH",
+          "name": "半導體 ETF",
+          "allocation": 0.35,
+          "monthly": 686
+        },
+        {
+          "symbol": "VGT",
+          "name": "科技行業 ETF",
+          "allocation": 0.30,
+          "monthly": 588
+        }
+      ],
+      "transactions": [],
+      "milestones": [
+        {"date": "2025-05-04", "title": "計劃啟動", "description": "首次供款 $1,960", "target_value": 1960},
+        {"date": "2026-05-04", "title": "第1年檢視", "description": "累計投入 $23,520", "target_value": 25000},
+        {"date": "2027-05-04", "title": "第2年檢視", "description": "累計投入 $47,040", "target_value": 56000},
+        {"date": "2028-05-04", "title": "第3年檢視", "description": "累計投入 $70,560", "target_value": 89000},
+        {"date": "2029-05-04", "title": "第4年檢視", "description": "累計投入 $94,080", "target_value": 126000},
+        {"date": "2030-05-04", "title": "供款結束", "description": "累計投入 $117,600", "target_value": 174000},
+        {"date": "2031-05-04", "title": "第6年檢視", "description": "複利增長中", "target_value": 200000},
+        {"date": "2032-05-04", "title": "第7年檢視", "description": "目標 $230,000", "target_value": 230000},
+        {"date": "2033-05-04", "title": "第8年檢視", "description": "複利增長中", "target_value": 264000},
+        {"date": "2034-05-04", "title": "第9年檢視", "description": "接近目標", "target_value": 304000},
+        {"date": "2035-05-04", "title": "目標達成", "description": "預期 $350,000", "target_value": 350000}
+      ]
     },
     {
-      "symbol": "SMH", 
-      "name": "半導體 ETF",
-      "allocation": 0.35,
-      "monthly": 686,
-      "currency": "USD"
-    },
-    {
-      "symbol": "VGT",
-      "name": "科技行業 ETF", 
-      "allocation": 0.30,
-      "monthly": 588,
-      "currency": "USD"
+      "id": "funds",
+      "name": "基金投資組合",
+      "type": "基金",
+      "start_date": "2025-05-04",
+      "monthly_investment": 5000,
+      "target_amount": 200000,
+      "contribution_years": 5,
+      "expected_return": 0.12,
+      "broker": "富途牛牛",
+      "currency": "HKD",
+      "investments": [
+        {
+          "symbol": "富蘭克林科技基金",
+          "name": "富蘭克林科技基金",
+          "allocation": 0.60,
+          "monthly": 3000
+        },
+        {
+          "symbol": "安聯環球人工智能",
+          "name": "安聯環球人工智能股票基金",
+          "allocation": 0.20,
+          "monthly": 1000
+        },
+        {
+          "symbol": "瀚亞日本動力",
+          "name": "瀚亞投資-日本動力股票基金",
+          "allocation": 0.20,
+          "monthly": 1000
+        }
+      ],
+      "transactions": [],
+      "milestones": [
+        {"date": "2025-05-04", "title": "計劃啟動", "description": "首次供款 $5,000", "target_value": 5000},
+        {"date": "2026-05-04", "title": "第1年檢視", "description": "累計投入 $60,000", "target_value": 65000},
+        {"date": "2027-05-04", "title": "第2年檢視", "description": "累計投入 $120,000", "target_value": 130000},
+        {"date": "2028-05-04", "title": "第3年檢視", "description": "累計投入 $180,000", "target_value": 200000},
+        {"date": "2029-05-04", "title": "供款結束", "description": "累計投入 $240,000", "target_value": 280000},
+        {"date": "2030-05-04", "title": "目標達成", "description": "預期 $350,000", "target_value": 350000}
+      ]
     }
   ],
-  "transactions": [],
   "market_data": {
     "last_updated": null,
     "prices": {}
-  },
-  "milestones": [
-    {"date": "2025-05-04", "title": "計劃啟動", "description": "首次供款 $1,960", "target_value": 1960},
-    {"date": "2026-05-04", "title": "第1年檢視", "description": "累計投入 $23,520", "target_value": 25000},
-    {"date": "2027-05-04", "title": "第2年檢視", "description": "累計投入 $47,040", "target_value": 56000},
-    {"date": "2028-05-04", "title": "第3年檢視", "description": "累計投入 $70,560", "target_value": 89000},
-    {"date": "2029-05-04", "title": "第4年檢視", "description": "累計投入 $94,080", "target_value": 126000},
-    {"date": "2030-05-04", "title": "供款結束", "description": "累計投入 $117,600", "target_value": 174000},
-    {"date": "2031-05-04", "title": "第6年檢視", "description": "複利增長中", "target_value": 200000},
-    {"date": "2032-05-04", "title": "第7年檢視", "description": "目標 $230,000", "target_value": 230000},
-    {"date": "2033-05-04", "title": "第8年檢視", "description": "複利增長中", "target_value": 264000},
-    {"date": "2034-05-04", "title": "第9年檢視", "description": "接近目標", "target_value": 304000},
-    {"date": "2035-05-04", "title": "目標達成", "description": "預期 $350,000", "target_value": 350000}
-  ]
+  }
 }
