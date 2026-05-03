@@ -1,8 +1,11 @@
 const CACHE_NAME = 'investment-tracker-v1';
+const BASE_PATH = '/investment-tracker';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/manifest.json',
+  BASE_PATH + '/',
+  BASE_PATH + '/index.html',
+  BASE_PATH + '/manifest.json',
+  BASE_PATH + '/add-transaction.html',
+  BASE_PATH + '/milestones.html',
   'https://cdn.jsdelivr.net/npm/chart.js',
   'https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns'
 ];
