@@ -48,43 +48,74 @@
     },
     {
       "id": "funds",
-      "name": "基金投資組合",
+      "name": "月供基金組合",
       "type": "基金",
       "start_date": "2025-05-04",
-      "monthly_investment": 5000,
-      "target_amount": 200000,
+      "monthly_investment": 5668,
+      "target_amount": 500000,
       "contribution_years": 5,
       "expected_return": 0.12,
       "broker": "富途牛牛",
-      "currency": "HKD",
+      "currency": "混合",
       "investments": [
         {
-          "symbol": "富蘭克林科技基金",
+          "symbol": "普徠仕美國大型增長",
+          "name": "普徠仕(盧森堡)美國大型增長股票基金",
+          "allocation": 0.0706,
+          "monthly": 400,
+          "currency": "USD",
+          "current_value": 5229.80
+        },
+        {
+          "symbol": "富蘭克林科技",
           "name": "富蘭克林科技基金",
-          "allocation": 0.60,
-          "monthly": 3000
+          "allocation": 0.5293,
+          "monthly": 3000,
+          "currency": "HKD",
+          "current_value": 59000.00
         },
         {
           "symbol": "安聯環球人工智能",
           "name": "安聯環球人工智能股票基金",
-          "allocation": 0.20,
-          "monthly": 1000
+          "allocation": 0.1764,
+          "monthly": 1000,
+          "currency": "HKD",
+          "current_value": 76500.00
         },
         {
           "symbol": "瀚亞日本動力",
           "name": "瀚亞投資-日本動力股票基金",
-          "allocation": 0.20,
-          "monthly": 1000
+          "allocation": 0.1126,
+          "monthly": 638,
+          "currency": "USD",
+          "current_value": 0.00
+        },
+        {
+          "symbol": "富達環球科技",
+          "name": "富達基金-環球科技基金",
+          "allocation": 0.0229,
+          "monthly": 130,
+          "currency": "USD",
+          "current_value": 4829.80
+        },
+        {
+          "symbol": "貝萊德世界科技",
+          "name": "貝萊德世界科技基金",
+          "allocation": 0.0882,
+          "monthly": 1000,
+          "currency": "HKD",
+          "current_value": 37000.00
         }
       ],
       "transactions": [],
       "milestones": [
-        {"date": "2025-05-04", "title": "計劃啟動", "description": "首次供款 $5,000", "target_value": 5000},
-        {"date": "2026-05-04", "title": "第1年檢視", "description": "累計投入 $60,000", "target_value": 65000},
-        {"date": "2027-05-04", "title": "第2年檢視", "description": "累計投入 $120,000", "target_value": 130000},
-        {"date": "2028-05-04", "title": "第3年檢視", "description": "累計投入 $180,000", "target_value": 200000},
-        {"date": "2029-05-04", "title": "供款結束", "description": "累計投入 $240,000", "target_value": 280000},
-        {"date": "2030-05-04", "title": "目標達成", "description": "預期 $350,000", "target_value": 350000}
+        {"date": "2025-05-04", "title": "計劃啟動", "description": "首次供款 $5,668", "target_value": 5668},
+        {"date": "2026-05-04", "title": "第1年檢視", "description": "累計投入 $68,016", "target_value": 75000},
+        {"date": "2027-05-04", "title": "第2年檢視", "description": "累計投入 $136,032", "target_value": 160000},
+        {"date": "2028-05-04", "title": "第3年檢視", "description": "累計投入 $204,048", "target_value": 250000},
+        {"date": "2029-05-04", "title": "第4年檢視", "description": "累計投入 $272,064", "target_value": 350000},
+        {"date": "2030-05-04", "title": "供款結束", "description": "累計投入 $340,080", "target_value": 450000},
+        {"date": "2031-05-04", "title": "目標達成", "description": "預期 $500,000", "target_value": 500000}
       ]
     }
   ],
